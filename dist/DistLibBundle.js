@@ -201,11 +201,13 @@ class ConnioObject extends com.fc.JavaScriptDistLib.ConnioCore {
 
   constructor() {
     super();
+    this.MQTTClient = null,
+    this.MQTTMessageRecvCallback =  null
   }
 
   configureMQTT() {
     let parent = this;
-    if ( !this.config.MQTTClient ) {
+    if ( !this.MQTTClient ) {
       try {
         if( this.config.BaseURL === '' || this.config.KEY === '' || this.config.Secret === '' ) {
           console.log("Please go to File -> Connio Properties and set credentials.");
@@ -213,12 +215,12 @@ class ConnioObject extends com.fc.JavaScriptDistLib.ConnioCore {
 
         if( this.config.MQTTHost !== '' && this.config.MQTTPort !== '' && this.config.MQTTCientID !== '' &&
           this.config.MQTTUsername !== '' && this.config.MQTTPassword !== '' && this.config.App !== '' ) {
-          this.connioMQTTClient = new Paho.MQTT.Client(this.config.MQTTHost, this.config.MQTTPort, this.config.MQTTCientID);
+          this.MQTTClient = new Paho.MQTT.Client(this.config.MQTTHost, this.config.MQTTPort, this.config.MQTTCientID);
           // set callback handlers
-          this.config.MQTTClient.onConnectionLost = function(responseObject) {
+          this.MQTTClient.onConnectionLost = function(responseObject) {
             parent.handleMQTTConnectionLost(responseObject);
           };
-          this.config.MQTTClient.onMessageArrived = function(message) {
+          this.MQTTClient.onMessageArrived = function(message) {
             parent.handleMQTTMessage(message);
           };
         }
@@ -234,14 +236,14 @@ class ConnioObject extends com.fc.JavaScriptDistLib.ConnioCore {
   }
   //HS: Deploy Alert!! All runtime objects needs to be reset here!
   reset() {
-    this.config.MQTTClient = null;
-    this.connioMQTTMessageRecvCallback = null;
+    this.MQTTClient = null;
+    this.MQTTMessageRecvCallback = null;
   }
 
   connioStartTrackingPropertyChanges(callback) {
     this.configure();
     this.configureMQTT();
-    this.connioMQTTMessageRecvCallback = callback;
+    this.MQTTMessageRecvCallback = callback;
     this.connio_mqtt_connect();
   }
 
@@ -395,7 +397,7 @@ class ConnioObject extends com.fc.JavaScriptDistLib.ConnioCore {
           let valueList = jsonPath(response, "$.results[:].v");
           let formattedTimeList = [];
           for (let i=0;i<timeList.length;i++) {
-            formattedTimeList.push(com.fc.dateFormat(new Date (timeList[i]),'MMM-d HH:mm a'));
+            formattedTimeList.push(com.fc.JavaScriptDistLib.TimeLibrary.dateFormat(new Date (timeList[i]),'MMM-d HH:mm a'));
           }
           timeList.reverse();
           formattedTimeList.reverse();
@@ -412,7 +414,7 @@ class ConnioObject extends com.fc.JavaScriptDistLib.ConnioCore {
     console.log("Connecting to Connio MQTT...");
     let parent = this;
     try {
-      this.connioMQTTClient.connect( {
+      this.MQTTClient.connect( {
         onSuccess: function() {
           console.log("Connected to Connio MQTT...");
           parent.subscribeToTopic();
@@ -425,13 +427,13 @@ class ConnioObject extends com.fc.JavaScriptDistLib.ConnioCore {
       });
     }
     catch(e) {
-      console.log("Connio MQTT connection already exists. Coming out...")
+      console.log("Connio MQTT connection failed.")
     }
   }
 
   connio_mqtt_disconnect() {
     console.log("Disconnecting Connio MQTT...");
-    this.connioMQTTClient.disconnect();
+    this.MQTTClient.disconnect();
   }
 
   subscribeToTopic() {
@@ -450,7 +452,7 @@ class ConnioObject extends com.fc.JavaScriptDistLib.ConnioCore {
       timeout: 10
     };
 
-    this.connioMQTTClient.subscribe(this.config.MQTTTopic, subscribeOptions);
+    this.MQTTClient.subscribe(this.config.MQTTTopic, subscribeOptions);
   }
 
   handleMQTTConnectionLost(responseObject) {
@@ -467,9 +469,9 @@ class ConnioObject extends com.fc.JavaScriptDistLib.ConnioCore {
 
   handleMQTTMessage(message) {
     //console.log("Connio MQTT Message Arrived: " + message.destinationName + " " + message.payloadString);
-    if( this.connioMQTTMessageRecvCallback ) {
+    if( this.MQTTMessageRecvCallback ) {
       let messageArray = message.destinationName.split("/");
-      this.connioMQTTMessageRecvCallback(messageArray[4], messageArray[6], message.payloadString);
+      this.MQTTMessageRecvCallback(messageArray[4], messageArray[6], message.payloadString);
     }
   }
 

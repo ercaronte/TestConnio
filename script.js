@@ -3,140 +3,140 @@ $(document).ready(function() {
   var nextTest;
 
   function Test1() {
-    // Block#: 229
+    // Block#: 50
     temp = '<h2>Test 1</h2>Testing Get device with filter<br><br>';
-    // Block#: 231
-    com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp); // Block#: 233
+    // Block#: 52
+    com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp); // Block#: 54
     com.fc.JavaScriptDistLib.Connio.connioGetDevices('_dpf_807651864374550548',
       function(devices) {
-        // Block#: 235
+        // Block#: 56
         temp = String(temp) + String(com.fc.JavaScriptDistLib.TextLib.convertToText(com.fc.JavaScriptDistLib.JSON.covertToJSON(com.fc.JavaScriptDistLib.JSON.parseJSONDataForPath(devices, '$.results[:].name'))));
-        // Block#: 243
+        // Block#: 64
         com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp);
       });
   }
 
   function Test2() {
-    // Block#: 246
+    // Block#: 67
     temp = '<h2>Test 2</h2>Testing Read data<br><br>';
-    // Block#: 248
-    com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp); // Block#: 250
+    // Block#: 69
+    com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp); // Block#: 71
     com.fc.JavaScriptDistLib.Connio.connioReadData('_dev_807652890532634093',
       function(data) {
-        // Block#: 252
+        // Block#: 73
         temp = String(temp) + String(com.fc.JavaScriptDistLib.Connio.connionGetValue(data, 'mostRecent', 'soilHumidity'));
-        // Block#: 258
+        // Block#: 79
         com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp);
       },
       function(error_data) {
-        // Block#: 260
+        // Block#: 81
         temp = String(temp) + String(com.fc.JavaScriptDistLib.TextLib.convertToText(error_data));
-        // Block#: 265
+        // Block#: 86
         com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp);
       });
   }
 
   function Test3() {
-    // Block#: 268
+    // Block#: 89
     temp = '<h2>Test 3</h2>Testing Hystorical data<br><br>';
-    // Block#: 270
-    com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp); // Block#: 272
+    // Block#: 91
+    com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp); // Block#: 93
     com.fc.JavaScriptDistLib.Connio.connioReadHistorical('_dev_807652890532634093', 'temperature', com.fc.JavaScriptDistLib.TimeLibrary.createTime("12:00 AM 31/01/2017"), com.fc.JavaScriptDistLib.TimeLibrary.createTime("08:00 AM 28/02/2017"), true, 3,
       function(time_list, value_list) {
-        // Block#: 279
+        // Block#: 100
         temp = [temp, (com.fc.JavaScriptDistLib.TextLib.convertToText(com.fc.JavaScriptDistLib.JSON.covertToJSON(time_list))), '<br><br>', (com.fc.JavaScriptDistLib.TextLib.convertToText(com.fc.JavaScriptDistLib.JSON.covertToJSON(value_list)))].join('');
-        // Block#: 289
+        // Block#: 110
         com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp);
       },
       function(error_data) {
-        // Block#: 291
+        // Block#: 112
         temp = String(temp) + String(com.fc.JavaScriptDistLib.TextLib.convertToText(error_data));
-        // Block#: 296
+        // Block#: 117
         com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp);
       });
   }
 
   function Test4() {
-    // Block#: 299
+    // Block#: 120
     temp = '<h2>Test 4</h2>Testing Write data to device<br><br>';
-    // Block#: 301
-    com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp); // Block#: 303
+    // Block#: 122
+    com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp); // Block#: 124
     com.fc.JavaScriptDistLib.Connio.connioWriteData('_dev_807652890532634093', 25, 'soilHumidity',
       function() {
-        // Block#: 307
+        // Block#: 128
         temp = String(temp) + String('Done!');
-        // Block#: 311
+        // Block#: 132
         com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp);
       },
       function(error_data) {
-        // Block#: 313
+        // Block#: 134
         temp = String(temp) + String(com.fc.JavaScriptDistLib.TextLib.convertToText(error_data));
-        // Block#: 318
+        // Block#: 139
         com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp);
       });
   }
 
   function Test5() {
-    // Block#: 321
+    // Block#: 142
     temp = '<h2>Test 5</h2>MQTT<br><br>';
-    // Block#: 323
-    com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp); // Block#: 325
-    com.fc.JavaScriptDistLib.Connio.connioStartTrackingPropertyChanges(on_connio_property_updated); // Block#: 326
+    // Block#: 144
+    com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp); // Block#: 146
+    com.fc.JavaScriptDistLib.Connio.connioStartTrackingPropertyChanges(on_connio_property_updated); // Block#: 147
     com.fc.JavaScriptDistLib.Button.setProperty["Text"]("Button", 'Click here to stop MQTT');
   }
 
   function Test6() {
-    // Block#: 329
+    // Block#: 150
     temp = '<h2>Test 5</h2>MQTT stoped<br><br>';
-    // Block#: 331
-    com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp); // Block#: 333
-    com.fc.JavaScriptDistLib.Connio.connioStopTrackingPropertyChanges(); // Block#: 334
+    // Block#: 152
+    com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp); // Block#: 154
+    com.fc.JavaScriptDistLib.Connio.connioStopTrackingPropertyChanges(); // Block#: 155
     com.fc.JavaScriptDistLib.Button.setProperty["Text"]("Button", 'Run Next Test');
   }
 
   function Test7() {
-    // Block#: 352
+    // Block#: 173
     temp = '<h2>Test 7</h2>Url not found<br><br>';
-    // Block#: 354
+    // Block#: 175
     com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp);
   }
-  // Block#: 180
+  // Block#: 1
   function on_Button_click() {
     try {
-      // Block#: 181
-      com.fc.JavaScriptDistLib.Button.setProperty["Text"]("Button", 'Run next test'); // Block#: 183
+      // Block#: 2
+      com.fc.JavaScriptDistLib.Button.setProperty["Text"]("Button", 'Run next test'); // Block#: 4
       if(nextTest == 1) {
-        // Block#: 187
+        // Block#: 8
         Test1();
-        // Block#: 188
+        // Block#: 9
         nextTest = 2;
       } else if(nextTest == 2) {
-        // Block#: 193
+        // Block#: 14
         Test2();
-        // Block#: 194
+        // Block#: 15
         nextTest = 3;
       } else if(nextTest == 3) {
-        // Block#: 199
+        // Block#: 20
         Test3();
-        // Block#: 200
+        // Block#: 21
         nextTest = 4;
       } else if(nextTest == 4) {
-        // Block#: 205
+        // Block#: 26
         Test4();
-        // Block#: 206
+        // Block#: 27
         nextTest = 5;
       } else if(nextTest == 5) {
-        // Block#: 211
+        // Block#: 32
         nextTest = 6;
-        // Block#: 213
+        // Block#: 34
         Test5();
       } else if(nextTest == 6) {
-        // Block#: 217
+        // Block#: 38
         nextTest = 7;
-        // Block#: 219
+        // Block#: 40
         Test6();
       } else {
-        // Block#: 220
+        // Block#: 41
         Test7();
       }
     } catch(e) {
@@ -144,24 +144,24 @@ $(document).ready(function() {
     }
   };
   $('[obj-name="Button"]').on('click', on_Button_click);
-  // Block#: 221
+  // Block#: 42
   function on_Button2_click() {
     try {
-      // Block#: 222
-      com.fc.JavaScriptDistLib.Button.setProperty["Text"]("Button2", 'initliazed!'); // Block#: 224
-      com.fc.JavaScriptDistLib.Button.setProperty["Background color"]("Button2", '#009900'); // Block#: 226
+      // Block#: 43
+      com.fc.JavaScriptDistLib.Button.setProperty["Text"]("Button2", 'initliazed!'); // Block#: 45
+      com.fc.JavaScriptDistLib.Button.setProperty["Background color"]("Button2", '#009900'); // Block#: 47
       nextTest = 1;
     } catch(e) {
       com.fc.JavaScriptDistLib.handleExceptionNative(e);
     }
   };
   $('[obj-name="Button2"]').on('click', on_Button2_click);
-  // Block#: 336
+  // Block#: 157
   function on_connio_property_updated(device_id, property, value) {
     try {
-      // Block#: 337
+      // Block#: 158
       temp = [temp, (com.fc.JavaScriptDistLib.TextLib.convertToText(device_id)), ', ', (com.fc.JavaScriptDistLib.TextLib.convertToText(property)), ', ', (com.fc.JavaScriptDistLib.TextLib.convertToText(value)), '<br>'].join('');
-      // Block#: 349
+      // Block#: 170
       com.fc.JavaScriptDistLib.Label.setProperty["Text"]("Label", temp);
     } catch(e) {
       com.fc.JavaScriptDistLib.handleException(e);
@@ -171,4 +171,4 @@ $(document).ready(function() {
   $('[obj-name="MainScreen"]').show();
 });
 // Generated by snapp
-// 353952-416763-994069-778432
+// 86062-442508-560807-394769
